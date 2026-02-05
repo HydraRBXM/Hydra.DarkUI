@@ -1,0 +1,172 @@
+-- Instances: 13 | Scripts: 2 | Modules: 0 | Tags: 2
+local CollectionService = game:GetService("CollectionService");
+local G2L = {};
+
+-- StarterGui.h
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["Name"] = [[h]];
+G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+
+
+-- StarterGui.h.darkui
+G2L["2"] = Instance.new("LocalScript", G2L["1"]);
+G2L["2"]["Name"] = [[darkui]];
+
+
+-- StarterGui.h.darkui.Dark-Welcome
+G2L["3"] = Instance.new("ScreenGui", G2L["2"]);
+G2L["3"]["IgnoreGuiInset"] = true;
+G2L["3"]["Enabled"] = false;
+G2L["3"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
+G2L["3"]["Name"] = [[Dark-Welcome]];
+G2L["3"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+G2L["3"]["ResetOnSpawn"] = false;
+
+
+-- StarterGui.h.darkui.Dark-Welcome.StartLua
+G2L["4"] = Instance.new("LocalScript", G2L["3"]);
+G2L["4"]["Enabled"] = false;
+G2L["4"]["Name"] = [[StartLua]];
+G2L["4"]["Disabled"] = true;
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome
+G2L["5"] = Instance.new("Frame", G2L["3"]);
+G2L["5"]["BorderSizePixel"] = 0;
+G2L["5"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5"]["Size"] = UDim2.new(1, 0, 1, 0);
+G2L["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["5"]["Name"] = [[Welcome]];
+G2L["5"]["BackgroundTransparency"] = 0.15;
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame
+G2L["6"] = Instance.new("Frame", G2L["5"]);
+G2L["6"]["Active"] = true;
+G2L["6"]["BorderSizePixel"] = 0;
+G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["6"]["Size"] = UDim2.new(0, 401, 0, 270);
+G2L["6"]["Position"] = UDim2.new(0.35988, 0, 0.33852, 0);
+G2L["6"]["BackgroundTransparency"] = 0.5;
+-- Attributes
+G2L["6"]:SetAttribute([[ThemeProperties]], [[{"BackgroundColor3":"BackgroundSecondary"}]]);
+
+-- Tags
+CollectionService:AddTag(G2L["6"], [[VFXStudio_ThemeableUI]]);
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.UICorner
+G2L["7"] = Instance.new("UICorner", G2L["6"]);
+G2L["7"]["CornerRadius"] = UDim.new(0.10669, 0);
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.UIStroke
+G2L["8"] = Instance.new("UIStroke", G2L["6"]);
+G2L["8"]["Color"] = Color3.fromRGB(71, 71, 71);
+-- Attributes
+G2L["8"]:SetAttribute([[ThemeProperties]], [[{"Color":"Border"}]]);
+
+-- Tags
+CollectionService:AddTag(G2L["8"], [[VFXStudio_ThemeableUI]]);
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.ThemeGradient
+G2L["9"] = Instance.new("UIGradient", G2L["6"]);
+G2L["9"]["Rotation"] = 24;
+G2L["9"]["Name"] = [[ThemeGradient]];
+G2L["9"]["Color"] = ColorSequence.new{ColorSequenceKeypoint.new(0.000, Color3.fromRGB(76, 76, 76)),ColorSequenceKeypoint.new(1.000, Color3.fromRGB(46, 46, 46))};
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.t2
+G2L["a"] = Instance.new("TextLabel", G2L["6"]);
+G2L["a"]["TextWrapped"] = true;
+G2L["a"]["BorderSizePixel"] = 0;
+G2L["a"]["TextSize"] = 14;
+G2L["a"]["TextScaled"] = true;
+G2L["a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["a"]["FontFace"] = Font.new([[rbxassetid://12187370928]], Enum.FontWeight.Regular, Enum.FontStyle.Italic);
+G2L["a"]["TextColor3"] = Color3.fromRGB(141, 141, 141);
+G2L["a"]["BackgroundTransparency"] = 1;
+G2L["a"]["Size"] = UDim2.new(0, 296, 0, 46);
+G2L["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["a"]["Text"] = [[Dark-UI]];
+G2L["a"]["Name"] = [[t2]];
+G2L["a"]["Position"] = UDim2.new(0.12968, 0, 0.49259, 0);
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.ImageLabel
+G2L["b"] = Instance.new("ImageLabel", G2L["6"]);
+G2L["b"]["BorderSizePixel"] = 0;
+G2L["b"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["b"]["ImageTransparency"] = 0.37;
+G2L["b"]["Image"] = [[rbxassetid://76181608348088]];
+G2L["b"]["Size"] = UDim2.new(0, 133, 0, 100);
+G2L["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["b"]["BackgroundTransparency"] = 1;
+G2L["b"]["Position"] = UDim2.new(0.33167, 0, 0.08148, 0);
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.t1
+G2L["c"] = Instance.new("TextLabel", G2L["6"]);
+G2L["c"]["TextWrapped"] = true;
+G2L["c"]["BorderSizePixel"] = 0;
+G2L["c"]["TextSize"] = 14;
+G2L["c"]["TextScaled"] = true;
+G2L["c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["c"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["c"]["TextColor3"] = Color3.fromRGB(141, 141, 141);
+G2L["c"]["BackgroundTransparency"] = 1;
+G2L["c"]["Size"] = UDim2.new(0, 296, 0, 32);
+G2L["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["c"]["Text"] = [[Made by @lolcatwastaken]];
+G2L["c"]["Name"] = [[t1]];
+G2L["c"]["Position"] = UDim2.new(0.12968, 0, 0.84074, 0);
+
+
+-- StarterGui.h.darkui.Dark-Welcome.Welcome.Frame.t3
+G2L["d"] = Instance.new("TextLabel", G2L["6"]);
+G2L["d"]["TextWrapped"] = true;
+G2L["d"]["BorderSizePixel"] = 0;
+G2L["d"]["TextSize"] = 14;
+G2L["d"]["TextScaled"] = true;
+G2L["d"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+G2L["d"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+G2L["d"]["TextColor3"] = Color3.fromRGB(141, 141, 141);
+G2L["d"]["BackgroundTransparency"] = 1;
+G2L["d"]["Size"] = UDim2.new(0, 296, 0, 21);
+G2L["d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+G2L["d"]["Text"] = [[Please Wait While Dark-UI Loads]];
+G2L["d"]["Name"] = [[t3]];
+G2L["d"]["Position"] = UDim2.new(0.12968, 0, 0.76296, 0);
+
+
+-- StarterGui.h.darkui
+local function C_2()
+local script = G2L["2"];
+	local player = game.Players.LocalPlayer
+	local playerGui = player:WaitForChild("PlayerGui")
+	local HTTPService = game:GetService("HttpService")
+	
+	script.Name = HTTPService:GenerateGUID(true)
+	script.Parent = playerGui
+	script.Enabled = true
+	
+	local startlua = script["Dark-Welcome"]
+	startlua.Parent = game.CoreGui
+	startlua.Enabled = true
+	startlua.StartLua.Enabled = true
+	
+	local function GetLevel()
+		local lev =	printidentity()
+		
+		return  lev
+	end
+	local level = GetLevel()
+	
+	wait(15)
+	script.MainUILua.Enabled = true
+	loadstring(`https://raw.githubusercontent.com/HydraRBXM/Hydra.DarkUI/refs/heads/main/MainUI`)
+	wait(1)
+	game.CoreGui:WaitForChild(`Dark-Main`).fol2.ExecuterLevel.Value = level
+end;
+task.spawn(C_2);
+
+return G2L["1"], require;
