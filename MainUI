@@ -1,10 +1,20 @@
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
+
 -- Instances: 584 | Scripts: 57 | Modules: 0 | Tags: 11
 local CollectionService = game:GetService("CollectionService");
 local G2L = {};
 
 -- StarterGui.Dark-Main
-G2L["1"] = Instance.new("ScreenGui", game.CoreGui);
+G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
 G2L["1"]["IgnoreGuiInset"] = true;
+G2L["1"]["Enabled"] = false;
 G2L["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
 G2L["1"]["Name"] = [[Dark-Main]];
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
@@ -4705,23 +4715,23 @@ G2L["247"]["Name"] = [[fol2]];
 
 
 -- StarterGui.Dark-Main.fol2.ExecuterLevel
-G2L["248"] = Instance.new("NumberValue", G2L["247"]);
+G2L["248"] = Instance.new("StringValue", G2L["247"]);
 G2L["248"]["Name"] = [[ExecuterLevel]];
 
 
 -- StarterGui.Dark-Main.fol.Scripts.Aimbot
 local function C_11()
-	local script = G2L["11"];
+local script = G2L["11"];
 	--// Services
 	local Players = game:GetService("Players")
 	local Player = Players.LocalPlayer
 	local UIS = game:GetService("UserInputService")
 	local RunService = game:GetService("RunService")
 	local camera = workspace.CurrentCamera
-
+	
 	--// Settings folder
 	local AimSettings = script.Parent.Parent.AimSettings
-
+	
 	--// Settings values
 	local LegitAim
 	local Accuracy
@@ -4734,7 +4744,7 @@ local function C_11()
 	local Prediction
 	local WallCheck
 	local ShakeIntensity
-
+	
 	--// Runtime state
 	local isAiming = false
 	local currentTarget = nil
@@ -4742,28 +4752,28 @@ local function C_11()
 	local shiftLockActive = false
 	local shakeOffset = Vector3.new(0,0,0)
 	local lastShakeUpdate = 0
-
+	
 	--// GUI
 	local screenGui = Instance.new("ScreenGui")
 	screenGui.Name = "AimbotFOV"
 	screenGui.IgnoreGuiInset = true
 	screenGui.ResetOnSpawn = false
 	screenGui.Parent = Player:WaitForChild("PlayerGui")
-
+	
 	local fovCircle = Instance.new("Frame")
 	fovCircle.AnchorPoint = Vector2.new(0.5, 0.5)
 	fovCircle.BackgroundTransparency = 1
 	fovCircle.BorderSizePixel = 0
 	fovCircle.Parent = screenGui
-
+	
 	local uiStroke = Instance.new("UIStroke")
 	uiStroke.Color = Color3.fromRGB(255,255,255)
 	uiStroke.Thickness = 2
 	uiStroke.Transparency = 0.5
 	uiStroke.Parent = fovCircle
-
+	
 	Instance.new("UICorner", fovCircle).CornerRadius = UDim.new(1,0)
-
+	
 	local targetDot = Instance.new("Frame")
 	targetDot.AnchorPoint = Vector2.new(0.5,0.5)
 	targetDot.Size = UDim2.new(0,8,0,8)
@@ -4772,7 +4782,7 @@ local function C_11()
 	targetDot.Visible = false
 	targetDot.Parent = screenGui
 	Instance.new("UICorner", targetDot).CornerRadius = UDim.new(1,0)
-
+	
 	--// Debug
 	local debugLabel = Instance.new("TextLabel")
 	debugLabel.Size = UDim2.new(0,420,0,300)
@@ -4785,17 +4795,17 @@ local function C_11()
 	debugLabel.TextXAlignment = Enum.TextXAlignment.Left
 	debugLabel.TextYAlignment = Enum.TextYAlignment.Top
 	debugLabel.Parent = screenGui
-
+	
 	--// Cache
 	local cachedCharacters = {}
 	local lastCacheUpdate = 0
 	local CACHE_UPDATE_INTERVAL = 0.3
-
+	
 	--// Utils
 	local function clamp(v,min,max)
 		return math.min(math.max(v,min),max)
 	end
-
+	
 	local function GetPlayerFromCharacter(char)
 		for _,plr in ipairs(Players:GetPlayers()) do
 			if plr.Character == char then
@@ -4804,18 +4814,18 @@ local function C_11()
 		end
 		return nil
 	end
-
+	
 	--// Shake Function
 	local function UpdateShake()
 		local now = tick()
 		if now - lastShakeUpdate < 0.05 then return end -- Update shake every 50ms
 		lastShakeUpdate = now
-
+	
 		if not currentTarget or not isAiming or ShakeIntensity <= 0 then
 			shakeOffset = Vector3.new(0,0,0)
 			return
 		end
-
+	
 		-- Small random shake to simulate natural hand movement
 		local intensity = ShakeIntensity * 0.01 -- Scale down the intensity
 		shakeOffset = Vector3.new(
@@ -4824,11 +4834,11 @@ local function C_11()
 			(math.random() - 0.5) * intensity
 		)
 	end
-
+	
 	--// Shift Lock Functions
 	local function EnableShiftLock()
 		if shiftLockActive then return end
-
+	
 		if Player.Character then
 			local humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
 			if humanoid then
@@ -4838,10 +4848,10 @@ local function C_11()
 			end
 		end
 	end
-
+	
 	local function DisableShiftLock()
 		if not shiftLockActive then return end
-
+	
 		if Player.Character then
 			local humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
 			if humanoid then
@@ -4851,7 +4861,7 @@ local function C_11()
 			end
 		end
 	end
-
+	
 	--// Settings update
 	local function UpdateSettings()
 		LegitAim = AimSettings.Legit.Value
@@ -4865,41 +4875,41 @@ local function C_11()
 		Prediction = tonumber(AimSettings.Prediction.Value) or 0
 		WallCheck = AimSettings.WallCheck and AimSettings.WallCheck.Value or false
 		ShakeIntensity = tonumber(AimSettings.ShakeIntensity and AimSettings.ShakeIntensity.Value or 2)
-
+	
 		Accuracy = clamp(Accuracy,0,100)
 		Smoothness = clamp(Smoothness,0.01,1)
 		Fov = clamp(Fov,1,180)
 		Prediction = clamp(Prediction,0,5)
 		ShakeIntensity = clamp(ShakeIntensity,0,10)
-
+	
 		debugLabel.Visible = AimSettings.Debug and AimSettings.Debug.Value or false
 	end
-
+	
 	--// FOV circle
 	local function UpdateFOVCircle()
 		if not Active then
 			fovCircle.Visible = false
 			return
 		end
-
+	
 		local mousePos = UIS:GetMouseLocation()
 		local radius = (Fov / 180) * (camera.ViewportSize.Y / 2)
-
+	
 		fovCircle.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y)
 		fovCircle.Size = UDim2.new(0, radius * 2, 0, radius * 2)
-
+	
 		uiStroke.Color = isAiming and Color3.fromRGB(0,255,0) or Color3.fromRGB(255,255,255)
 		uiStroke.Transparency = isAiming and 0.3 or 0.5
-
+	
 		fovCircle.Visible = true
 	end
-
+	
 	--// Character cache
 	local function UpdateCharacterCache()
 		if tick() - lastCacheUpdate < CACHE_UPDATE_INTERVAL then return end
 		lastCacheUpdate = tick()
 		table.clear(cachedCharacters)
-
+	
 		for _,plr in ipairs(Players:GetPlayers()) do
 			if plr ~= Player and plr.Character then
 				local hum = plr.Character:FindFirstChildOfClass("Humanoid")
@@ -4908,7 +4918,7 @@ local function C_11()
 				end
 			end
 		end
-
+	
 		for _,obj in ipairs(workspace:GetChildren()) do
 			if obj:IsA("Model") and obj ~= Player.Character then
 				local hum = obj:FindFirstChildOfClass("Humanoid")
@@ -4918,92 +4928,92 @@ local function C_11()
 			end
 		end
 	end
-
+	
 	--// Wall Check Function
 	local function IsTargetVisible(targetPart)
 		if not WallCheck then return true end
 		if not targetPart then return false end
-
+	
 		local origin = camera.CFrame.Position
 		local targetPos = targetPart.Position
 		local direction = (targetPos - origin)
-
+	
 		local raycastParams = RaycastParams.new()
 		raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 		raycastParams.FilterDescendantsInstances = {Player.Character, targetPart.Parent}
 		raycastParams.IgnoreWater = true
-
+	
 		local rayResult = workspace:Raycast(origin, direction, raycastParams)
-
+	
 		if rayResult then
 			return false
 		end
-
+	
 		return true
 	end
-
+	
 	--// Prediction Function
 	local function GetPredictedPosition(part)
 		if not part or Prediction <= 0 then return part.Position end
-
+	
 		local velocity = Vector3.new(0,0,0)
-
+	
 		if part:IsA("BasePart") then
 			velocity = part.AssemblyLinearVelocity or part.Velocity or Vector3.new(0,0,0)
 		end
-
+	
 		if velocity.Magnitude < 0.1 then
 			return part.Position
 		end
-
+	
 		local predictedPos = part.Position + (velocity * Prediction)
-
+	
 		return predictedPos
 	end
-
+	
 	--// FOV check
 	local function IsInFOV(pos)
 		local screen,onScreen = camera:WorldToScreenPoint(pos)
 		if not onScreen then return false end
-
+	
 		local mousePos = UIS:GetMouseLocation()
 		local dist = (Vector2.new(screen.X,screen.Y) - mousePos).Magnitude
 		local radius = (Fov/180)*(camera.ViewportSize.Y/2)
 		return dist <= radius, Vector2.new(screen.X,screen.Y)
 	end
-
+	
 	--// Target finder
 	local function GetClosestTarget()
 		UpdateCharacterCache()
-
+	
 		local closest,closestPos,shortest = nil,nil,math.huge
 		local checked,valid,wallBlocked = 0,0,0
 		local targetTeam = "N/A"
 		local targetDistance = 0
 		local targetRotation = "N/A"
-
+	
 		local mousePos = UIS:GetMouseLocation()
-
+	
 		for _,char in ipairs(cachedCharacters) do
 			checked += 1
 			local part = char:FindFirstChild(PartDetection)
 			if part then
 				local plr = GetPlayerFromCharacter(char)
-
+	
 				if TeamCheck and plr and Player.Team and plr.Team == Player.Team then
 					continue
 				end
-
+	
 				valid += 1
-
+	
 				if not IsTargetVisible(part) then
 					wallBlocked += 1
 					continue
 				end
-
+	
 				local predictedPos = GetPredictedPosition(part)
 				local ok,screenPos = IsInFOV(predictedPos)
-
+	
 				if ok then
 					local dist = (screenPos - mousePos).Magnitude
 					if dist < shortest then
@@ -5011,11 +5021,11 @@ local function C_11()
 						closest = part
 						closestPos = screenPos
 						targetTeam = plr and (plr.Team and plr.Team.Name or "No Team") or "NPC"
-
+	
 						if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
 							targetDistance = (part.Position - Player.Character.HumanoidRootPart.Position).Magnitude
 						end
-
+	
 						local hrp = char:FindFirstChild("HumanoidRootPart")
 						if hrp then
 							local _,_,_,r00,r01,r02,r10,r11,r12,r20,r21,r22 = hrp.CFrame:GetComponents()
@@ -5028,12 +5038,12 @@ local function C_11()
 				end
 			end
 		end
-
+	
 		local targetName = closest and closest.Parent.Name or "NONE"
 		if targetDistance > 0 then
 			targetName = string.format("%s - (%.1f studs)", targetName, targetDistance)
 		end
-
+	
 		debugLabel.Text = string.format(
 			"=== AIMBOT ===\nActive: %s\nAiming: %s\nLegitAim: %s\nSmooth: %.2f\nFOV: %.0f\nPart: %s\nTeamCheck: %s\nPrediction: %.2f\nWallCheck: %s\nShake: %.1f\nChecked: %d\nValid: %d\nWallBlock: %d\nLocked: %s\nTarget: %s\nTeam: %s\nRotation: %s\nShiftLock: %s",
 			tostring(Active),
@@ -5055,10 +5065,10 @@ local function C_11()
 			targetRotation,
 			shiftLockActive and "ENABLED" or "DISABLED"
 		)
-
+	
 		return closest,closestPos
 	end
-
+	
 	--// Aim logic
 	local function CharacterLookAtTarget()
 		if not currentTarget then return end
@@ -5066,20 +5076,20 @@ local function C_11()
 		if not char then return end
 		local hrp = char:FindFirstChild("HumanoidRootPart")
 		if not hrp then return end
-
+	
 		local targetPos = GetPredictedPosition(currentTarget) + shakeOffset
 		local dir = (targetPos - hrp.Position)
 		dir = Vector3.new(dir.X,0,dir.Z)
 		if dir.Magnitude < 0.01 then return end
-
+	
 		local targetCF = CFrame.new(hrp.Position, hrp.Position + dir.Unit)
 		hrp.CFrame = hrp.CFrame:Lerp(targetCF, LegitAim and 0.15 or 0.4)
 	end
-
+	
 	local function CameraFollowTarget()
 		if not currentTarget then return end
 		CharacterLookAtTarget()
-
+	
 		local targetPos = GetPredictedPosition(currentTarget) + shakeOffset
 		local dir = (targetPos - camera.CFrame.Position)
 		if dir.Magnitude < 0.01 then return end
@@ -5088,7 +5098,7 @@ local function C_11()
 			clamp(Smoothness * 0.3,0.01,0.4)
 		)
 	end
-
+	
 	--// Loop
 	local function AimbotLoop()
 		if not Active or not isAiming then
@@ -5098,11 +5108,11 @@ local function C_11()
 			shakeOffset = Vector3.new(0,0,0)
 			return
 		end
-
+	
 		UpdateShake()
 		local target,screenPos = GetClosestTarget()
 		currentTarget = target
-
+	
 		if target then
 			targetDot.Position = UDim2.new(0,screenPos.X,0,screenPos.Y)
 			targetDot.Visible = true
@@ -5113,7 +5123,7 @@ local function C_11()
 			DisableShiftLock()
 		end
 	end
-
+	
 	--// Input
 	UIS.InputBegan:Connect(function(i,gp)
 		if gp then return end
@@ -5121,52 +5131,52 @@ local function C_11()
 			isAiming = true
 		end
 	end)
-
+	
 	UIS.InputEnded:Connect(function(i)
 		if i.UserInputType == Enum.UserInputType.MouseButton2 then
 			isAiming = false
 			DisableShiftLock()
 		end
 	end)
-
+	
 	--// Connections
 	RunService.Heartbeat:Connect(UpdateFOVCircle)
 	RunService.RenderStepped:Connect(AimbotLoop)
-
+	
 	task.spawn(function()
 		while true do
 			UpdateSettings()
 			task.wait(1)
 		end
 	end)
-
+	
 	UpdateSettings()
 	print("=== AIMBOT LOADED | CURSOR SHAKE | NO STICKY AIM | PREDICTION + WALLCHECK + SHIFT LOCK ===")
 end;
 task.spawn(C_11);
 -- StarterGui.Dark-Main.fol.Scripts.Rage
 local function C_12()
-	local script = G2L["12"];
+local script = G2L["12"];
 	local Player = game.Players.LocalPlayer
 	local UIS = game:GetService("UserInputService")
 	local RunService = game:GetService("RunService")
 	local camera = workspace.CurrentCamera
 	local AimSettings = script.Parent.Parent.RageSettings
-
+	
 	local Active
 	local PosAbove
 	local ToggleKey = Enum.KeyCode.T -- Toggle key
-
+	
 	local isAiming = false
 	local rageActive = false
 	local currentTarget = nil
 	local targetScreenPos = nil
-
+	
 	-- Cache for performance
 	local cachedCharacters = {}
 	local lastCacheUpdate = 0
 	local CACHE_UPDATE_INTERVAL = 0.3
-
+	
 	-- Custom clamp function
 	local function clamp(value, min, max)
 		if not value or type(value) ~= "number" then
@@ -5174,25 +5184,25 @@ local function C_12()
 		end
 		return math.min(math.max(value, min), max)
 	end
-
+	
 	local function UpdateSettings()
 		Active = AimSettings.Active.Value
 		PosAbove = tonumber(AimSettings.PosAbove.Value) or 10
-
+	
 		-- Clamp PosAbove to reasonable values
 		PosAbove = clamp(PosAbove, 1, 100)
 	end
-
+	
 	-- Cache characters to reduce lag
 	local function UpdateCharacterCache()
 		local currentTime = tick()
 		if currentTime - lastCacheUpdate < CACHE_UPDATE_INTERVAL then
 			return
 		end
-
+	
 		lastCacheUpdate = currentTime
 		cachedCharacters = {}
-
+	
 		-- Get player characters
 		for _, player in pairs(game.Players:GetPlayers()) do
 			if player ~= Player and player.Character then
@@ -5202,7 +5212,7 @@ local function C_12()
 				end
 			end
 		end
-
+	
 		-- Get NPCs/Models with Humanoid
 		for _, obj in pairs(workspace:GetChildren()) do
 			if obj:IsA("Model") and obj ~= Player.Character then
@@ -5222,121 +5232,121 @@ local function C_12()
 			end
 		end
 	end
-
+	
 	-- Find closest target
 	local function GetClosestTarget()
 		UpdateCharacterCache()
-
+	
 		local closestTarget = nil
 		local shortestDistance = math.huge
-
+	
 		local playerChar = Player.Character
 		if not playerChar or not playerChar:FindFirstChild("HumanoidRootPart") then
 			return nil
 		end
-
+	
 		local playerPos = playerChar.HumanoidRootPart.Position
-
+	
 		for _, character in pairs(cachedCharacters) do
 			-- Look for HumanoidRootPart or Torso
 			local targetPart = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
-
+	
 			if targetPart then
 				local distance = (targetPart.Position - playerPos).Magnitude
-
+	
 				if distance < shortestDistance then
 					shortestDistance = distance
 					closestTarget = targetPart
 				end
 			end
 		end
-
+	
 		return closestTarget
 	end
-
+	
 	-- Teleport player above target and make them look down
 	local function TeleportAboveTarget()
 		if not currentTarget then return end
-
+	
 		local playerChar = Player.Character
 		if not playerChar then return end
-
+	
 		local humanoidRootPart = playerChar:FindFirstChild("HumanoidRootPart")
 		if not humanoidRootPart then return end
-
+	
 		-- Get target position and validate it
 		local targetPos = currentTarget.Position
-
+	
 		-- Check if target position is valid (not NaN or inf)
 		if targetPos ~= targetPos or math.abs(targetPos.X) == math.huge or math.abs(targetPos.Y) == math.huge or math.abs(targetPos.Z) == math.huge then
 			warn("Invalid target position detected!")
 			currentTarget = nil
 			return
 		end
-
+	
 		-- Calculate position above target (with safety check)
 		local heightOffset = tonumber(PosAbove) or 10
 		local abovePos = Vector3.new(targetPos.X, targetPos.Y + heightOffset, targetPos.Z)
-
+	
 		-- Validate the above position
 		if abovePos ~= abovePos or math.abs(abovePos.Y) == math.huge then
 			warn("Invalid above position calculated!")
 			currentTarget = nil
 			return
 		end
-
+	
 		-- Create CFrame looking down at target
 		local lookAtCFrame = CFrame.new(abovePos, targetPos)
-
+	
 		-- Teleport player above target (use pcall for safety)
 		local success = pcall(function()
 			humanoidRootPart.CFrame = lookAtCFrame
 		end)
-
+	
 		if not success then
 			warn("Failed to teleport player!")
 			currentTarget = nil
 		end
 	end
-
+	
 	-- Force camera to lock on target
 	local function CameraLockOnTarget()
 		if not currentTarget then return end
-
+	
 		local playerChar = Player.Character
 		if not playerChar then return end
-
+	
 		local humanoidRootPart = playerChar:FindFirstChild("HumanoidRootPart")
 		if not humanoidRootPart then return end
-
+	
 		-- Look directly down at target
 		local targetPos = currentTarget.Position
-
+	
 		-- Validate target position
 		if targetPos ~= targetPos or math.abs(targetPos.X) == math.huge then
 			return
 		end
-
+	
 		-- Get current camera position
 		local currentCFrame = camera.CFrame
-
+	
 		-- Create look direction pointing down at target
 		local lookDirection = (targetPos - humanoidRootPart.Position).Unit
-
+	
 		-- Validate look direction
 		if lookDirection ~= lookDirection then
 			return
 		end
-
+	
 		-- Create target CFrame looking at target
 		local targetCFrame = CFrame.new(currentCFrame.Position, currentCFrame.Position + lookDirection)
-
+	
 		-- Instant camera lock (use pcall for safety)
 		pcall(function()
 			camera.CFrame = targetCFrame
 		end)
 	end
-
+	
 	-- Main RageBot function
 	local function ActivateRageBot()
 		if not Active or not rageActive then
@@ -5344,18 +5354,18 @@ local function C_12()
 			targetScreenPos = nil
 			return
 		end
-
+	
 		-- Get closest target
 		local target = GetClosestTarget()
-
+	
 		if target then
 			-- Validate target exists and has valid position
 			if target.Parent and target.Position == target.Position then
 				currentTarget = target
-
+	
 				-- Teleport player above target
 				TeleportAboveTarget()
-
+	
 				-- Force camera lock down at target
 				CameraLockOnTarget()
 			else
@@ -5366,14 +5376,14 @@ local function C_12()
 			targetScreenPos = nil
 		end
 	end
-
+	
 	-- Toggle key handler
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end
-
+	
 		if input.KeyCode == ToggleKey then
 			rageActive = not rageActive
-
+	
 			if rageActive then
 				print(">>> RAGEBOT ACTIVATED <<<")
 				print("Player will hover above targets!")
@@ -5383,12 +5393,12 @@ local function C_12()
 			end
 		end
 	end)
-
+	
 	-- Main RageBot loop
 	RunService.RenderStepped:Connect(function()
 		ActivateRageBot()
 	end)
-
+	
 	-- Settings update loop
 	spawn(function()
 		while true do
@@ -5396,7 +5406,7 @@ local function C_12()
 			wait(10)
 		end
 	end)
-
+	
 	-- Initial load
 	UpdateSettings()
 	print("=== RAGEBOT LOADED ===")
@@ -5407,13 +5417,13 @@ end;
 task.spawn(C_12);
 -- StarterGui.Dark-Main.fol.Scripts.FunCarStuff
 local function C_13()
-	local script = G2L["13"];
+local script = G2L["13"];
 	local Toggles = script.Parent.Parent.CarSillyz
 	local TweenService = game:GetService("TweenService")
 	local RunService = game:GetService("RunService")
 	local UIS = game:GetService("UserInputService")
 	local Player = game:GetService("Players").LocalPlayer
-
+	
 	local SpinCar
 	local FlyCar
 	local ByeCar
@@ -5422,10 +5432,10 @@ local function C_13()
 	local boosty
 	local GimmieSeat
 	local GetSomeone
-
+	
 	local FlySpeed
 	local FlyUp, FlyDown, FlyLeft, FlyRight, FlyForward, FlyBackward = false, false, false, false, false, false
-
+	
 	local SpinConnection
 	local FlyConnection
 	local InputBeganConnection
@@ -5435,11 +5445,11 @@ local function C_13()
 	local BoostConnection
 	local BoostInputBeganConnection
 	local BoostInputEndedConnection
-
+	
 	local SuscarDebounce = false
 	local BouncyDebounce = false
 	local KidnapDebounce = false
-
+	
 	local function UpdateVals()
 		SpinCar = Toggles.Bools.SpinCar.Value
 		FlyCar = Toggles.Bools.FlyCar.Value
@@ -5451,38 +5461,38 @@ local function C_13()
 		GimmieSeat = Toggles.Bools.GetCar.Value
 		GetSomeone = Toggles.Bools.Kidnap.Value
 	end
-
+	
 	local function StopSpin()
 		if SpinConnection then
 			SpinConnection:Disconnect()
 			SpinConnection = nil
 		end
 	end
-
+	
 	local function SpinCarFunc()
 		StopSpin()
 		if not SpinCar then return end
-
+	
 		local character = Player.Character
 		if not character then return end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not hrp or not humanoid then return end
-
+	
 		local spinSpeed = 0
-
+	
 		SpinConnection = RunService.RenderStepped:Connect(function(dt)
 			if not Toggles.Bools.SpinCar.Value then
 				StopSpin()
 				return
 			end
-
+	
 			if not hrp.Parent or not humanoid then
 				StopSpin()
 				return
 			end
-
+	
 			if humanoid.Sit and humanoid.SeatPart then
 				local seat = humanoid.SeatPart
 				spinSpeed += dt * 2
@@ -5493,13 +5503,13 @@ local function C_13()
 			end
 		end)
 	end
-
+	
 	local function StopBouncy()
 		if BounceConnection then
 			BounceConnection:Disconnect()
 			BounceConnection = nil
 		end
-
+	
 		local character = Player.Character
 		if character then
 			local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -5507,7 +5517,7 @@ local function C_13()
 				local sound = hrp:FindFirstChild("BounceSound")
 				if sound then sound:Destroy() end
 			end
-
+	
 			for _, part in pairs(character:GetDescendants()) do
 				if part:IsA("BasePart") and part:GetAttribute("OriginalElasticity") then
 					part.Elasticity = part:GetAttribute("OriginalElasticity")
@@ -5516,53 +5526,53 @@ local function C_13()
 			end
 		end
 	end
-
+	
 	local function BouncyCarFunc()
 		StopBouncy()
 		if not BouncyCar then return end
-
+	
 		local character = Player.Character
 		if not character then return end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not hrp or not humanoid then return end
-
+	
 		local bounceSound = Instance.new("Sound")
 		bounceSound.Name = "BounceSound"
 		bounceSound.SoundId = "rbxassetid://6565266876"
 		bounceSound.Volume = 0.5
 		bounceSound.Parent = hrp
-
+	
 		local bounceTimer = 0
 		local isGoingUp = true
 		local bounceCount = 1
 		local upVelocity = 80
 		local downVelocity = -100
-
+	
 		BounceConnection = RunService.Heartbeat:Connect(function(dt)
 			if not Toggles.Bools.Bouncy.Value then
 				StopBouncy()
 				return
 			end
-
+	
 			if not hrp.Parent or not humanoid then
 				StopBouncy()
 				return
 			end
-
+	
 			if humanoid.Sit or humanoid.SeatPart then
 				local seat = humanoid.SeatPart
 				if seat and (seat:IsA("VehicleSeat") or seat:IsA("Seat")) then
 					bounceTimer += dt
-
+	
 					if isGoingUp then
 						seat.AssemblyLinearVelocity = Vector3.new(
 							seat.AssemblyLinearVelocity.X,
 							upVelocity,
 							seat.AssemblyLinearVelocity.Z
 						)
-
+	
 						if bounceTimer >= 2 then
 							isGoingUp = false
 							bounceTimer = 0
@@ -5577,7 +5587,7 @@ local function C_13()
 							downVelocity,
 							seat.AssemblyLinearVelocity.Z
 						)
-
+	
 						if bounceTimer >= 2 then
 							isGoingUp = true
 							bounceTimer = 0
@@ -5587,9 +5597,9 @@ local function C_13()
 				end
 				return
 			end
-
+	
 			bounceTimer += dt
-
+	
 			if isGoingUp then
 				hrp.AssemblyLinearVelocity = Vector3.new(
 					hrp.AssemblyLinearVelocity.X,
@@ -5597,7 +5607,7 @@ local function C_13()
 					hrp.AssemblyLinearVelocity.Z
 				)
 				humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
-
+	
 				if bounceTimer >= 2 then
 					isGoingUp = false
 					bounceTimer = 0
@@ -5612,7 +5622,7 @@ local function C_13()
 					downVelocity,
 					hrp.AssemblyLinearVelocity.Z
 				)
-
+	
 				if bounceTimer >= 2 then
 					isGoingUp = true
 					bounceTimer = 0
@@ -5621,115 +5631,115 @@ local function C_13()
 			end
 		end)
 	end
-
+	
 	local function StopFling()
 		if FlingConnection then
 			FlingConnection:Disconnect()
 			FlingConnection = nil
 		end
 	end
-
+	
 	local function FlingCarFunc()
 		StopFling()
 		if not FlingCarToggle then return end
-
+	
 		local character = Player.Character
 		if not character then return end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not hrp or not humanoid then return end
-
+	
 		local seat = humanoid.SeatPart
 		if not seat then 
 			warn("You need to be in a seat to use Fling Car!")
 			Toggles.Bools.Fling.Value = false
 			return 
 		end
-
+	
 		local flingPower = 200
 		local skyPower = 0
 		local spinSpeed = 0
 		local crazyTimer = 0
 		local phase = 1
-
+	
 		FlingConnection = RunService.Heartbeat:Connect(function(dt)
 			if not Toggles.Fling.Value then
 				StopFling()
 				return
 			end
-
+	
 			if not hrp.Parent or not humanoid then
 				StopFling()
 				return
 			end
-
+	
 			if not humanoid.Sit or not humanoid.SeatPart then
 				StopFling()
 				return
 			end
-
+	
 			seat = humanoid.SeatPart
 			crazyTimer += dt
-
+	
 			if phase == 1 then
 				spinSpeed += dt * 20
-
+	
 				seat.AssemblyAngularVelocity = Vector3.new(
 					math.random(-50, 50),
 					spinSpeed * 30,
 					math.random(-50, 50)
 				)
-
+	
 				local shake = math.random(-flingPower, flingPower)
 				seat.AssemblyLinearVelocity = Vector3.new(
 					shake,
 					math.abs(math.sin(crazyTimer * 20)) * 50,
 					shake
 				)
-
+	
 				if crazyTimer >= 3 then
 					phase = 2
 					crazyTimer = 0
 					skyPower = 0
 				end
-
+	
 			elseif phase == 2 then
 				skyPower += dt * 100
-
+	
 				seat.AssemblyAngularVelocity = Vector3.new(
 					math.random(-100, 100),
 					math.random(-100, 100),
 					math.random(-100, 100)
 				)
-
+	
 				seat.AssemblyLinearVelocity = Vector3.new(
 					math.sin(crazyTimer * 10) * 50,
 					skyPower,
 					math.cos(crazyTimer * 10) * 50
 				)
-
+	
 				if crazyTimer >= 5 then
 					phase = 3
 					crazyTimer = 0
 				end
-
+	
 			elseif phase == 3 then
 				seat.AssemblyAngularVelocity = Vector3.new(
 					math.random(-200, 200),
 					math.random(-200, 200),
 					math.random(-200, 200)
 				)
-
+	
 				local wildX = math.sin(crazyTimer * 15) * 150
 				local wildZ = math.cos(crazyTimer * 15) * 150
-
+	
 				seat.AssemblyLinearVelocity = Vector3.new(
 					wildX,
 					-50 + math.sin(crazyTimer * 20) * 30,
 					wildZ
 				)
-
+	
 				if crazyTimer >= 8 then
 					phase = 1
 					crazyTimer = 0
@@ -5738,7 +5748,7 @@ local function C_13()
 			end
 		end)
 	end
-
+	
 	local function StopFly()
 		if FlyConnection then
 			FlyConnection:Disconnect()
@@ -5752,7 +5762,7 @@ local function C_13()
 			InputEndedConnection:Disconnect()
 			InputEndedConnection = nil
 		end
-
+	
 		local character = Player.Character
 		if character then
 			local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -5761,26 +5771,26 @@ local function C_13()
 				if bv then bv:Destroy() end
 			end
 		end
-
+	
 		FlyUp, FlyDown, FlyLeft, FlyRight, FlyForward, FlyBackward = false, false, false, false, false, false
 	end
-
+	
 	local function FlyCarFunc()
 		StopFly()
 		if not FlyCar then return end
-
+	
 		local character = Player.Character
 		if not character then return end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not hrp or not humanoid then return end
-
+	
 		local bodyVelocity = Instance.new("BodyVelocity")
 		bodyVelocity.MaxForce = Vector3.new(1e5, 1e5, 1e5)
 		bodyVelocity.Velocity = Vector3.zero
 		bodyVelocity.Parent = hrp
-
+	
 		InputBeganConnection = UIS.InputBegan:Connect(function(input, gp)
 			if gp then return end
 			if input.KeyCode == Enum.KeyCode.Space then FlyUp = true
@@ -5790,7 +5800,7 @@ local function C_13()
 			elseif input.KeyCode == Enum.KeyCode.A then FlyLeft = true
 			elseif input.KeyCode == Enum.KeyCode.D then FlyRight = true end
 		end)
-
+	
 		InputEndedConnection = UIS.InputEnded:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.Space then FlyUp = false
 			elseif input.KeyCode == Enum.KeyCode.LeftShift then FlyDown = false
@@ -5799,28 +5809,28 @@ local function C_13()
 			elseif input.KeyCode == Enum.KeyCode.A then FlyLeft = false
 			elseif input.KeyCode == Enum.KeyCode.D then FlyRight = false end
 		end)
-
+	
 		FlyConnection = RunService.RenderStepped:Connect(function()
 			if not Toggles.Bools.FlyCar.Value then
 				StopFly()
 				return
 			end
-
+	
 			if not hrp.Parent or not humanoid then
 				StopFly()
 				return
 			end
-
+	
 			local cam = workspace.CurrentCamera
 			local dir = Vector3.zero
-
+	
 			if FlyForward then dir += cam.CFrame.LookVector * FlySpeed end
 			if FlyBackward then dir -= cam.CFrame.LookVector * FlySpeed end
 			if FlyRight then dir += cam.CFrame.RightVector * FlySpeed end
 			if FlyLeft then dir -= cam.CFrame.RightVector * FlySpeed end
 			if FlyUp then dir += Vector3.new(0, FlySpeed, 0) end
 			if FlyDown then dir -= Vector3.new(0, FlySpeed, 0) end
-
+	
 			if humanoid.Sit and humanoid.SeatPart then
 				local seat = humanoid.SeatPart
 				seat.AssemblyLinearVelocity = dir
@@ -5829,53 +5839,53 @@ local function C_13()
 			end
 		end)
 	end
-
+	
 	local function StopBoost()
 		if BoostConnection then BoostConnection:Disconnect() BoostConnection = nil end
 		if BoostInputBeganConnection then BoostInputBeganConnection:Disconnect() BoostInputBeganConnection = nil end
 		if BoostInputEndedConnection then BoostInputEndedConnection:Disconnect() BoostInputEndedConnection = nil end
 	end
-
+	
 	local function BoostyAhhCar()
 		StopBoost()
 		if not Toggles.Bools.Boost.Value then return end
-
+	
 		local character = Player.Character
 		if not character then return end
-
+	
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not humanoid then return end
-
+	
 		local boosting = false
 		local boostSpeed = math.random(250, 1000)
-
+	
 		BoostInputBeganConnection = UIS.InputBegan:Connect(function(input, gp)
 			if gp then return end
 			if input.KeyCode == Enum.KeyCode.B then
 				boosting = true
 			end
 		end)
-
+	
 		BoostInputEndedConnection = UIS.InputEnded:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.B then
 				boosting = false
 			end
 		end)
-
+	
 		BoostConnection = RunService.Heartbeat:Connect(function()
 			if not Toggles.Bools.Boost.Value then
 				StopBoost()
 				return
 			end
-
+	
 			if not humanoid.Sit or not humanoid.SeatPart then return end
 			local seat = humanoid.SeatPart
 			if not seat or not seat.Parent then return end
-
+	
 			if boosting then
 				local look = seat.CFrame.LookVector
 				local currentVel = seat.AssemblyLinearVelocity
-
+	
 				seat.AssemblyLinearVelocity = Vector3.new(
 					look.X * boostSpeed,
 					currentVel.Y,
@@ -5884,49 +5894,49 @@ local function C_13()
 			end
 		end)
 	end
-
+	
 	local function Suscar()
 		if not Toggles.Bools.ByeCar.Value then return end
 		if SuscarDebounce then return end
 		SuscarDebounce = true
-
+	
 		local character = Player.Character
 		if not character then
 			SuscarDebounce = false
 			return
 		end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not hrp or not humanoid then
 			SuscarDebounce = false
 			return
 		end
-
+	
 		if humanoid.Sit and humanoid.SeatPart then
 			local seat = humanoid.SeatPart
 			local lastCFrame = seat.CFrame
-
+	
 			seat.CFrame = CFrame.new(10000, 10000, 10000)
 			task.wait(0.15)
-
+	
 			seat.CFrame = lastCFrame
 		else
 			local lastCFrame = hrp.CFrame
-
+	
 			hrp.CFrame = CFrame.new(10000, 10000, 10000)
-
+	
 			humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-
+	
 			task.wait(0.15)
-
+	
 			hrp.CFrame = lastCFrame
 		end
-
+	
 		Toggles.Bools.ByeCar.Value = false
 		SuscarDebounce = false
 	end
-
+	
 	local function GetSeats()
 		local seats = {}
 		for _, v in pairs(workspace:GetDescendants()) do
@@ -5936,63 +5946,63 @@ local function C_13()
 		end
 		return seats
 	end
-
+	
 	local function GoToSeat()
 		if not Toggles.Bools.GetCar.Value then return end
 		local character = Player.Character
 		if not character then return end
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		if not hrp then return end
-
+	
 		local seats = GetSeats()
 		if #seats == 0 then
 			warn("No vehicle seats found!")
 			return
 		end
-
+	
 		local targetSeat = seats[math.random(1, #seats)]
 		local targetPos = targetSeat.Position + Vector3.new(0, 5, 0)
-
+	
 		hrp.CFrame = CFrame.new(targetPos)
-
+	
 		task.wait(0.1)
-
+	
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if humanoid then
 			humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 		end
 	end
-
+	
 	local function Kidnap()
 		if not GetSomeone then return end
 		if KidnapDebounce then return end
 		KidnapDebounce = true
-
+	
 		local character = Player.Character
 		if not character then 
 			KidnapDebounce = false
 			return 
 		end
-
+	
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if not humanoid then 
 			KidnapDebounce = false
 			return 
 		end
-
+	
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		if not hrp then 
 			KidnapDebounce = false
 			return 
 		end
-
+	
 		if not humanoid.Sit or not humanoid.SeatPart then 
 			warn("You need to be in a vehicle to kidnap someone!")
 			Toggles.Bools.Kidnap.Value = false
 			KidnapDebounce = false
 			return 
 		end
-
+	
 		local seat = humanoid.SeatPart
 		if not seat or not seat.Parent then 
 			warn("Kidnap: You are not in a valid seat!")
@@ -6000,7 +6010,7 @@ local function C_13()
 			KidnapDebounce = false
 			return
 		end
-
+	
 		local targetPlayer = game.Players:FindFirstChild(Toggles.KidnapTarget.Value)
 		if not targetPlayer or not targetPlayer:IsA("Player") then
 			warn("No valid target selected!")
@@ -6008,14 +6018,14 @@ local function C_13()
 			KidnapDebounce = false
 			return
 		end
-
+	
 		if targetPlayer == Player then
 			warn("Can't kidnap yourself!")
 			Toggles.Bools.Kidnap.Value = false
 			KidnapDebounce = false
 			return
 		end
-
+	
 		local targetChar = workspace:FindFirstChild(targetPlayer.Name)
 		if not targetChar then
 			warn("Target is not in the game!")
@@ -6023,7 +6033,7 @@ local function C_13()
 			KidnapDebounce = false
 			return
 		end
-
+	
 		local targetHRP = targetChar:FindFirstChild("HumanoidRootPart")
 		if not targetHRP then
 			warn("Target has no HumanoidRootPart!")
@@ -6031,7 +6041,7 @@ local function C_13()
 			KidnapDebounce = false
 			return
 		end
-
+	
 		local lastPos = seat.CFrame
 		local vehicle = seat.Parent
 		local allSeats = {}
@@ -6040,54 +6050,54 @@ local function C_13()
 				table.insert(allSeats, obj)
 			end
 		end
-
+	
 		print(string.format("Kidnapping %s with %d attempts", targetPlayer.Name, 10))
-
+	
 		for attempt = 1, 10 do
 			seat.CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 3, 0))
-
+	
 			task.wait(0.1)
-
+	
 			local targetHumanoid = targetChar:FindFirstChildOfClass("Humanoid")
 			if targetHumanoid and targetHumanoid.Sit then
 				print(string.format("Success! %s is now in the vehicle!", targetPlayer.Name))
 				break
 			end
-
+	
 			if attempt == 10 then
 				warn("Failed to kidnap target after 10 attempts")
 			end
 		end
-
+	
 		task.wait(0.5)
-
+	
 		seat.CFrame = lastPos
-
+	
 		Toggles.Bools.Kidnap.Value = false
 		KidnapDebounce = false
 	end
-
+	
 	Toggles.Bools.SpinCar.Changed:Connect(function()
 		UpdateVals()
 		SpinCarFunc()
 	end)
-
+	
 	Toggles.Bools.FlyCar.Changed:Connect(function()
 		UpdateVals()
 		FlyCarFunc()
 	end)
-
+	
 	Toggles.Bools.ByeCar.Changed:Connect(function(value)
 		if value then
 			Suscar()
 		end
 	end)
-
+	
 	Toggles.Bools.Bouncy.Changed:Connect(function(value)
 		UpdateVals()
 		BouncyCarFunc()
 	end)
-
+	
 	Toggles.Bools.Fling.Changed:Connect(function(value)
 		UpdateVals()
 		if value then
@@ -6096,7 +6106,7 @@ local function C_13()
 			StopFling()
 		end
 	end)
-
+	
 	Toggles.Bools.Boost.Changed:Connect(function(value)
 		UpdateVals()
 		if value then
@@ -6105,7 +6115,7 @@ local function C_13()
 			StopBoost()
 		end
 	end)
-
+	
 	Toggles.Bools.GetCar.Changed:Connect(function(value)
 		UpdateVals()
 		if value then
@@ -6113,19 +6123,19 @@ local function C_13()
 			Toggles.Bools.GetCar.Value = false
 		end
 	end)
-
+	
 	Toggles.Bools.Kidnap.Changed:Connect(function(value)
 		UpdateVals()
 		if value then
 			Kidnap()
 		end
 	end)
-
+	
 	UpdateVals()
 	SpinCarFunc()
 	FlyCarFunc()
 	BouncyCarFunc()
-
+	
 	while true do
 		UpdateVals()
 		task.wait(2)
@@ -6134,7 +6144,7 @@ end;
 task.spawn(C_13);
 -- StarterGui.Dark-Main.fol.Scripts.AntiHandcuff
 local function C_14()
-	local script = G2L["14"];
+local script = G2L["14"];
 	local tp = CFrame.new(-923.753784, 99.4347458, 2064.48511, -0.89847815, -4.68718397e-10, -0.43901825, -2.77744716e-10, 1, -4.99229491e-10, 0.43901825, -3.26611793e-10, -0.89847815)
 	local plr = game.Players.LocalPlayer
 	local char = plr.Character or plr.CharacterAdded:Wait()
@@ -6142,21 +6152,21 @@ local function C_14()
 	local root = char:WaitForChild("HumanoidRootPart")
 	local players = game:GetService("Players")
 	local rs = game:GetService("RunService")
-
+	
 	local HitboxAnti
-
+	
 	local function CleanHitbox()
 		if HitboxAnti then
 			HitboxAnti:Destroy()
 			HitboxAnti = nil
 		end
 	end
-
+	
 	local function MakeHitbox()
 		CleanHitbox()
 		if char.Humanoid.WalkSpeed <= 0 then return end
 		if HitboxAnti then return end
-
+	
 		HitboxAnti = Instance.new("Part")
 		HitboxAnti.Size = Vector3.new(5, 12, 5)
 		HitboxAnti.Transparency = .7
@@ -6164,14 +6174,14 @@ local function C_14()
 		HitboxAnti.Anchored = false
 		HitboxAnti.Massless = true
 		HitboxAnti.Parent = char
-
+	
 		local weld = Instance.new("Weld")
 		weld.Part0 = HitboxAnti
 		weld.Part1 = root
 		weld.Parent = HitboxAnti
-
+	
 		HitboxAnti.Name = "HitboxAnti"
-
+	
 		HitboxAnti.Touched:Connect(function(hit)
 			if hit.Parent:IsA("Model") and hit.Parent:FindFirstChild("Humanoid") and hit.Parent:FindFirstChild("HumanoidRootPart") and hit.Parent ~= char then
 				-- Use FindFirstChild instead of WaitForChild to avoid yielding
@@ -6183,7 +6193,7 @@ local function C_14()
 			end
 		end)
 	end
-
+	
 	-- Handle character respawn
 	plr.CharacterAdded:Connect(function(newChar)
 		char = newChar
@@ -6191,7 +6201,7 @@ local function C_14()
 		root = char:WaitForChild("HumanoidRootPart")
 		CleanHitbox()
 	end)
-
+	
 	-- Main loop
 	while task.wait(1) do
 		if script.Parent.Parent.CarSillyz.Bools["Anti Handcuff"].Value then
@@ -6204,13 +6214,13 @@ end;
 task.spawn(C_14);
 -- StarterGui.Dark-Main.fol.Scripts.sp.ESP-CLIENT
 local function C_16()
-	local script = G2L["16"];
+local script = G2L["16"];
 	-- Unified ESP Script with Debug Display
 	local players = game:GetService("Players")
 	local workspace = game:GetService("Workspace")
 	local RunService = game:GetService("RunService")
 	local localPlayer = players.LocalPlayer
-
+	
 	-- Settings (will be updated dynamically)
 	local Settings = {
 		Esp = false,
@@ -6221,9 +6231,9 @@ local function C_16()
 		TeamCheck = false,
 		Debug = false,
 	}
-
+	
 	local EspSettings = script.Parent.Parent.Parent.EspSettings
-
+	
 	-- Update Settings function
 	local function UpdateSettings()
 		Settings.Esp = EspSettings.Toggle.Value
@@ -6234,14 +6244,14 @@ local function C_16()
 		Settings.TeamCheck = EspSettings.TeamCheck.Value
 		Settings.Debug = EspSettings.Debug.Value
 	end
-
+	
 	-- Storage tables
 	local LastBoxs = {}
 	local LastHitboxes = {}
 	local LastTracers = {}
 	local highlights = {}
 	local rainbowHue = 0
-
+	
 	-- Debug GUI Setup
 	local frame = Instance.new("Frame")
 	frame.Name = "DebugFrame"
@@ -6253,7 +6263,7 @@ local function C_16()
 	frame.Parent = script.Parent.Parent.Parent.Parent
 	frame.BackgroundTransparency = 0.5
 	frame.Visible = false -- Start hidden, will be updated by Settings.Debug
-
+	
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
 	title.Size = UDim2.new(1, 0, 0, 25)
@@ -6264,7 +6274,7 @@ local function C_16()
 	title.TextSize = 16
 	title.Font = Enum.Font.SourceSansBold
 	title.Parent = frame
-
+	
 	local settingsText = Instance.new("TextLabel")
 	settingsText.Name = "SettingsText"
 	settingsText.Size = UDim2.new(1, -10, 1, -30)
@@ -6276,15 +6286,15 @@ local function C_16()
 	settingsText.TextXAlignment = Enum.TextXAlignment.Left
 	settingsText.TextYAlignment = Enum.TextYAlignment.Top
 	settingsText.Parent = frame
-
+	
 	local debugFrame = frame
 	local debugText = settingsText
-
+	
 	-- Update Debug Display
 	local function UpdateDebugDisplay()
 		-- Update visibility based on Debug setting
 		debugFrame.Visible = Settings.Debug
-
+	
 		local text = string.format(
 			"Esp = %s\nBoxEsp = %s\nHitboxEsp = %s\nTracers = %s\nRainbow = %s\nTeamcheck = %s\nDebug = %s",
 			tostring(Settings.Esp),
@@ -6297,7 +6307,7 @@ local function C_16()
 		)
 		debugText.Text = text
 	end
-
+	
 	-- Helper Functions
 	local function GetPlayerFromCharacter(character)
 		for _, player in pairs(players:GetPlayers()) do
@@ -6307,7 +6317,7 @@ local function C_16()
 		end
 		return nil
 	end
-
+	
 	-- Clear Functions
 	local function ClearHighlights()
 		for _, highlightData in pairs(highlights) do
@@ -6317,7 +6327,7 @@ local function C_16()
 		end
 		highlights = {}
 	end
-
+	
 	local function ClearBoxs()
 		for _, boxData in pairs(LastBoxs) do
 			if boxData and boxData.gui and boxData.gui.Parent then
@@ -6326,7 +6336,7 @@ local function C_16()
 		end
 		LastBoxs = {}
 	end
-
+	
 	local function ClearHitboxes()
 		for _, box in pairs(LastHitboxes) do
 			if box and box.Parent then
@@ -6335,7 +6345,7 @@ local function C_16()
 		end
 		LastHitboxes = {}
 	end
-
+	
 	local function ClearTracers()
 		for _, tracerData in pairs(LastTracers) do
 			if tracerData and tracerData.part and tracerData.part.Parent then
@@ -6344,30 +6354,30 @@ local function C_16()
 		end
 		LastTracers = {}
 	end
-
+	
 	-- ESP (Highlight) Functions
 	local function UpdateHighlights()
 		if not Settings.Esp then
 			ClearHighlights()
 			return
 		end
-
+	
 		ClearHighlights()
-
+	
 		for _, model in pairs(workspace:GetChildren()) do
 			if model:IsA("Model") and model ~= localPlayer.Character then
 				local humanoid = model:FindFirstChildOfClass("Humanoid")
 				local targetRoot = model:FindFirstChild("HumanoidRootPart")
-
+	
 				if humanoid and humanoid.Health > 0 and targetRoot then
 					local player = GetPlayerFromCharacter(model)
-
+	
 					local highlight = Instance.new("Highlight")
 					highlight.Name = "ESPHighlight"
 					highlight.Adornee = model
 					highlight.FillTransparency = 0.5
 					highlight.OutlineTransparency = 0
-
+	
 					if Settings.Rainbow then
 						highlight.FillColor = Color3.fromHSV(rainbowHue, 1, 1)
 						highlight.OutlineColor = Color3.fromHSV(rainbowHue, 1, 1)
@@ -6383,9 +6393,9 @@ local function C_16()
 						highlight.FillColor = Color3.fromRGB(255, 255, 255)
 						highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
 					end
-
+	
 					highlight.Parent = model
-
+	
 					table.insert(highlights, {
 						highlight = highlight,
 						target = targetRoot,
@@ -6396,7 +6406,7 @@ local function C_16()
 			end
 		end
 	end
-
+	
 	-- Box ESP Functions
 	local function CreateBox(character, player)
 		local box = Instance.new("BillboardGui")
@@ -6405,38 +6415,38 @@ local function C_16()
 		box.StudsOffset = Vector3.new(0, 1, 0)
 		box.AlwaysOnTop = true
 		box.MaxDistance = 10000
-
+	
 		local frame = Instance.new("Frame")
 		frame.Size = UDim2.new(1, 0, 1, 0)
 		frame.BackgroundTransparency = 1
 		frame.Parent = box
-
+	
 		local topLine = Instance.new("Frame")
 		topLine.Size = UDim2.new(1, 0, 0, 2)
 		topLine.Position = UDim2.new(0, 0, 0, 0)
 		topLine.BorderSizePixel = 0
 		topLine.Parent = frame
-
+	
 		local bottomLine = Instance.new("Frame")
 		bottomLine.Size = UDim2.new(1, 0, 0, 2)
 		bottomLine.Position = UDim2.new(0, 0, 1, -2)
 		bottomLine.BorderSizePixel = 0
 		bottomLine.Parent = frame
-
+	
 		local leftLine = Instance.new("Frame")
 		leftLine.Size = UDim2.new(0, 2, 1, 0)
 		leftLine.Position = UDim2.new(0, 0, 0, 0)
 		leftLine.BorderSizePixel = 0
 		leftLine.Parent = frame
-
+	
 		local rightLine = Instance.new("Frame")
 		rightLine.Size = UDim2.new(0, 2, 1, 0)
 		rightLine.Position = UDim2.new(1, -2, 0, 0)
 		rightLine.BorderSizePixel = 0
 		rightLine.Parent = frame
-
+	
 		local boxColor = Color3.fromRGB(255, 255, 255)
-
+	
 		if Settings.Rainbow then
 			boxColor = Color3.fromHSV(rainbowHue, 1, 1)
 		elseif Settings.TeamCheck then
@@ -6446,34 +6456,34 @@ local function C_16()
 				boxColor = Color3.fromRGB(255, 0, 0)
 			end
 		end
-
+	
 		topLine.BackgroundColor3 = boxColor
 		bottomLine.BackgroundColor3 = boxColor
 		leftLine.BackgroundColor3 = boxColor
 		rightLine.BackgroundColor3 = boxColor
-
+	
 		return box, {topLine, bottomLine, leftLine, rightLine}
 	end
-
+	
 	local function UpdateBoxes()
 		if not Settings.BoxEsp then
 			ClearBoxs()
 			return
 		end
-
+	
 		ClearBoxs()
-
+	
 		for _, model in pairs(workspace:GetChildren()) do
 			if model:IsA("Model") and model ~= localPlayer.Character then
 				local humanoid = model:FindFirstChildOfClass("Humanoid")
 				local hrp = model:FindFirstChild("HumanoidRootPart")
-
+	
 				if humanoid and humanoid.Health > 0 and hrp then
 					local player = GetPlayerFromCharacter(model)
-
+	
 					local box, lines = CreateBox(model, player)
 					box.Parent = hrp
-
+	
 					table.insert(LastBoxs, {
 						gui = box,
 						lines = lines,
@@ -6485,21 +6495,21 @@ local function C_16()
 			end
 		end
 	end
-
+	
 	-- Hitbox ESP Functions
 	local function UpdateHitboxes()
 		if not Settings.HitboxEsp then
 			ClearHitboxes()
 			return
 		end
-
+	
 		ClearHitboxes()
-
+	
 		for _, character in pairs(workspace:GetChildren()) do
 			if character:IsA("Model") and character ~= localPlayer.Character then
 				local humanoid = character:FindFirstChild("Humanoid")
 				local hrp = character:FindFirstChild("HumanoidRootPart")
-
+	
 				if humanoid and humanoid.Health > 0 and hrp then
 					local boxPart = Instance.new("Part")
 					boxPart.Name = "HitBox"
@@ -6509,7 +6519,7 @@ local function C_16()
 					boxPart.CanCollide = false
 					boxPart.Parent = hrp
 					boxPart.CFrame = hrp.CFrame
-
+	
 					if Settings.Rainbow then
 						boxPart.Color = Color3.fromHSV(rainbowHue, 1, 1)
 					elseif Settings.TeamCheck then
@@ -6522,51 +6532,51 @@ local function C_16()
 					else
 						boxPart.Color = Color3.fromRGB(255, 255, 255)
 					end
-
+	
 					boxPart.Material = Enum.Material.Neon
 					boxPart.CastShadow = false
 					boxPart.Massless = true
 					boxPart.Locked = true
-
+	
 					table.insert(LastHitboxes, boxPart)
 				end
 			end
 		end
 	end
-
+	
 	-- Tracers Functions
 	local function UpdateTracers()
 		if not Settings.Tracers then
 			ClearTracers()
 			return
 		end
-
+	
 		ClearTracers()
-
+	
 		local localChar = localPlayer.Character
 		if not localChar or not localChar:FindFirstChild("HumanoidRootPart") then
 			return
 		end
-
+	
 		local localRoot = localChar.HumanoidRootPart
-
+	
 		for _, character in pairs(workspace:GetChildren()) do
 			if character:IsA("Model") and character ~= localChar then
 				local humanoid = character:FindFirstChild("Humanoid")
 				local targetRoot = character:FindFirstChild("HumanoidRootPart")
-
+	
 				if humanoid and humanoid.Health > 0 and targetRoot then
 					local startPos = localRoot.Position
 					local endPos = targetRoot.Position
 					local distance = (startPos - endPos).Magnitude
 					local midPoint = (startPos + endPos) / 2
-
+	
 					local tracer = Instance.new("Part")
 					tracer.Name = "Tracer"
 					tracer.Anchored = true
 					tracer.CanCollide = false
 					tracer.Material = Enum.Material.Neon
-
+	
 					if Settings.Rainbow then
 						tracer.Color = Color3.fromHSV(rainbowHue, 1, 1)
 					elseif Settings.TeamCheck then
@@ -6579,31 +6589,31 @@ local function C_16()
 					else
 						tracer.Color = Color3.fromRGB(255, 255, 255)
 					end
-
+	
 					tracer.Transparency = 0.3
 					tracer.Size = Vector3.new(0.1, 0.1, distance)
 					tracer.CastShadow = false
 					tracer.Massless = true
 					tracer.Locked = true
-
+	
 					tracer.CFrame = CFrame.new(midPoint, endPos)
 					tracer.Parent = workspace.CurrentCamera
-
+	
 					table.insert(LastTracers, {part = tracer, target = targetRoot, source = localRoot})
 				end
 			end
 		end
 	end
-
+	
 	-- Main Update Loop
 	RunService.Heartbeat:Connect(function()
 		rainbowHue = (rainbowHue + 0.005) % 1
-
+	
 		-- Update rainbow background for debug GUI (only if visible)
 		if Settings.Debug then
 			debugFrame.BackgroundColor3 = Color3.fromHSV(rainbowHue, 1, 1)
 		end
-
+	
 		-- Update Highlights
 		if Settings.Esp then
 			for i = #highlights, 1, -1 do
@@ -6631,7 +6641,7 @@ local function C_16()
 		else
 			ClearHighlights()
 		end
-
+	
 		-- Update Box ESP
 		if Settings.BoxEsp then
 			for i = #LastBoxs, 1, -1 do
@@ -6663,7 +6673,7 @@ local function C_16()
 		else
 			ClearBoxs()
 		end
-
+	
 		-- Update Hitbox ESP
 		if Settings.HitboxEsp then
 			for i = #LastHitboxes, 1, -1 do
@@ -6683,7 +6693,7 @@ local function C_16()
 		else
 			ClearHitboxes()
 		end
-
+	
 		-- Update Tracers
 		if Settings.Tracers then
 			local localChar = localPlayer.Character
@@ -6696,10 +6706,10 @@ local function C_16()
 						local endPos = tracerData.target.Position
 						local distance = (startPos - endPos).Magnitude
 						local midPoint = (startPos + endPos) / 2
-
+	
 						tracerData.part.Size = Vector3.new(0.1, 0.1, distance)
 						tracerData.part.CFrame = CFrame.new(midPoint, endPos)
-
+	
 						if Settings.Rainbow then
 							tracerData.part.Color = Color3.fromHSV(rainbowHue, 1, 1)
 						end
@@ -6715,7 +6725,7 @@ local function C_16()
 			ClearTracers()
 		end
 	end)
-
+	
 	-- Periodic Update Loop
 	spawn(function()
 		while true do
@@ -6728,34 +6738,34 @@ local function C_16()
 			task.wait(1)
 		end
 	end)
-
+	
 	-- Initial update
 	UpdateSettings()
 	UpdateDebugDisplay()
-
+	
 	print("Unified ESP Script Loaded!")
 end;
 task.spawn(C_16);
 -- StarterGui.Dark-Main.fol.Scripts.FarmQuidz
 local function C_17()
-	local script = G2L["17"];
+local script = G2L["17"];
 	local plr = game.Players.LocalPlayer
 	local char = plr.Character or plr.CharacterAdded:Wait()
 	local hum = char:WaitForChild("Humanoid")
 	local root = char:WaitForChild("HumanoidRootPart")
 	local players = game:GetService("Players")
 	local rs = game:GetService("RunService")
-
-
-
+	
+	
+	
 	local function EndFarm()
-
+		
 	end
-
+	
 	local function StartFarm()
-
+		
 	end
-
+	
 	-- Main loop
 	while task.wait(1) do
 		if script.Parent.Parent.CarSillyz.Bools["Anti Handcuff"].Value then
@@ -6768,19 +6778,19 @@ end;
 task.spawn(C_17);
 -- StarterGui.Dark-Main.Holder.Side.Player.Time.LocalScript
 local function C_3a()
-	local script = G2L["3a"];
+local script = G2L["3a"];
 	local text = script.Parent
 	local player = game.Players.LocalPlayer
-
+	
 	-- Function to get current time with AM/PM
 	local function getCurrentTime()
 		-- Get current time
 		local now = os.date("*t")
-
+	
 		-- Convert to 12-hour format
 		local hour = now.hour
 		local ampm = "AM"
-
+	
 		if hour >= 12 then
 			ampm = "PM"
 			if hour > 12 then
@@ -6789,19 +6799,19 @@ local function C_3a()
 		elseif hour == 0 then
 			hour = 12
 		end
-
+	
 		-- Format the time string
 		return string.format("%d:%02d %s", hour, now.min, ampm)
 	end
-
+	
 	-- Function to update the text
 	local function updateTime()
 		text.Text = getCurrentTime()
 	end
-
+	
 	-- Update immediately
 	updateTime()
-
+	
 	-- Update every second to keep time current
 	game:GetService("RunService").Heartbeat:Connect(function()
 		-- Only update once per second to avoid unnecessary updates
@@ -6813,9 +6823,9 @@ end;
 task.spawn(C_3a);
 -- StarterGui.Dark-Main.Holder.Side.Buttons.Home.LocalScript
 local function C_46()
-	local script = G2L["46"];
+local script = G2L["46"];
 	local pages = script.Parent.Parent.Parent.Parent.Holder
-
+	
 	local function CloseOthers()
 		for _, page in pairs(pages:GetChildren()) do
 			if page:IsA("Frame") and page.Visible then
@@ -6823,20 +6833,20 @@ local function C_46()
 			end
 		end
 	end
-
+	
 	local function OpenPage()
 		CloseOthers()
 		pages:WaitForChild(`Home`)
 	end
-
+	
 	script.Parent.Activated:Connect(OpenPage)
 end;
 task.spawn(C_46);
 -- StarterGui.Dark-Main.Holder.Side.Buttons.Aimbot.LocalScript
 local function C_4d()
-	local script = G2L["4d"];
+local script = G2L["4d"];
 	local pages = script.Parent.Parent.Parent.Parent.Holder
-
+	
 	local function CloseOthers()
 		for _, page in pairs(pages:GetChildren()) do
 			if page:IsA("Frame") and page.Visible then
@@ -6844,20 +6854,20 @@ local function C_4d()
 			end
 		end
 	end
-
+	
 	local function OpenPage()
 		CloseOthers()
 		pages:WaitForChild(`Aimbot`)
 	end
-
+	
 	script.Parent.Activated:Connect(OpenPage)
 end;
 task.spawn(C_4d);
 -- StarterGui.Dark-Main.Holder.Side.Buttons.ESP.LocalScript
 local function C_52()
-	local script = G2L["52"];
+local script = G2L["52"];
 	local pages = script.Parent.Parent.Parent.Parent.Holder
-
+	
 	local function CloseOthers()
 		for _, page in pairs(pages:GetChildren()) do
 			if page:IsA("Frame") and page.Visible then
@@ -6865,20 +6875,20 @@ local function C_52()
 			end
 		end
 	end
-
+	
 	local function OpenPage()
 		CloseOthers()
 		pages:WaitForChild(`ESP`)
 	end
-
+	
 	script.Parent.Activated:Connect(OpenPage)
 end;
 task.spawn(C_52);
 -- StarterGui.Dark-Main.Holder.Side.Buttons.CarStuff.LocalScript
 local function C_57()
-	local script = G2L["57"];
+local script = G2L["57"];
 	local pages = script.Parent.Parent.Parent.Parent.Holder
-
+	
 	local function CloseOthers()
 		for _, page in pairs(pages:GetChildren()) do
 			if page:IsA("Frame") and page.Visible then
@@ -6886,20 +6896,20 @@ local function C_57()
 			end
 		end
 	end
-
+	
 	local function OpenPage()
 		CloseOthers()
 		pages:WaitForChild(`Car`)
 	end
-
+	
 	script.Parent.Activated:Connect(OpenPage)
 end;
 task.spawn(C_57);
 -- StarterGui.Dark-Main.Holder.Side.Buttons.Extra.LocalScript
 local function C_5c()
-	local script = G2L["5c"];
+local script = G2L["5c"];
 	local pages = script.Parent.Parent.Parent.Parent.Holder
-
+	
 	local function CloseOthers()
 		for _, page in pairs(pages:GetChildren()) do
 			if page:IsA("Frame") and page.Visible then
@@ -6907,59 +6917,59 @@ local function C_5c()
 			end
 		end
 	end
-
+	
 	local function OpenPage()
 		CloseOthers()
 		pages:WaitForChild(`Extra`)
 	end
-
+	
 	script.Parent.Activated:Connect(OpenPage)
 end;
 task.spawn(C_5c);
 -- StarterGui.Dark-Main.Holder.Holder.Home.TextLabel.LocalScript
 local function C_65()
-	local script = G2L["65"];
+local script = G2L["65"];
 	script.Parent.Text = "Welcome @"..game.Players.LocalPlayer.Name
 end;
 task.spawn(C_65);
 -- StarterGui.Dark-Main.Holder.Holder.Home.Info.Game.LocalScript
 local function C_77()
-	local script = G2L["77"];
+local script = G2L["77"];
 	script.Parent.Text = "Game: " ..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
 end;
 task.spawn(C_77);
 -- StarterGui.Dark-Main.Holder.Holder.Home.Info.Ping.LocalScript
 local function C_79()
-	local script = G2L["79"];
+local script = G2L["79"];
 	-- Function to get current ping
 	local function getPing()
 		local player = game.Players.LocalPlayer
-
+	
 		return function()
 			return player:GetNetworkPing() * 1000 -- Convert to milliseconds
 		end
 	end
-
+	
 	-- Function to update the text
 	local function updtext()
 		local PingGetter = getPing()
 		local text = script.Parent -- Adjust this to reference your TextLabel
-
+	
 		game:GetService("RunService").Heartbeat:Connect(function()
 			text.Text = string.format("Ping: %d ms", math.round(PingGetter()))
 		end)
 	end
-
+	
 	-- Start the updates
 	updtext()
 end;
 task.spawn(C_79);
 -- StarterGui.Dark-Main.Holder.Holder.Home.Info.Executer.LocalScript
 local function C_7b()
-	local script = G2L["7b"];
+local script = G2L["7b"];
 	local runservice = game:GetService("RunService")
 	local level 
-
+		
 	runservice.Heartbeat:Connect(function()
 		level = script.Parent.Parent.Parent.Parent.Parent.Parent.fol2.ExecuterLevel.Value
 		script.Parent.Text = "Executer Level: "..level
@@ -6968,16 +6978,15 @@ end;
 task.spawn(C_7b);
 -- StarterGui.Dark-Main.Holder.Holder.Home.Info.Fps.LocalScript
 local function C_7d()
-	local script = G2L["7d"];
-
-
+local script = G2L["7d"];
+	
 	-- Function to get current FPS
 	local function getfps()
 		local runService = game:GetService("RunService")
 		local fps = 0
 		local frameCount = 0
 		local lastTime = tick()
-
+	
 		runService.Heartbeat:Connect(function()
 			frameCount = frameCount + 1
 			local currentTime = tick()
@@ -6987,26 +6996,26 @@ local function C_7d()
 				lastTime = currentTime
 			end
 		end)
-
+	
 		return function() return fps end
 	end
-
+	
 	-- Function to update the text
 	local function updtext()
 		local fpsGetter = getfps()
-
+	
 		game:GetService("RunService").Heartbeat:Connect(function()
-			text.Text = string.format("FPS: %d", fpsGetter())
+			script.Parent.Text = string.format("FPS: %d", fpsGetter())
 		end)
 	end
-
+	
 	-- Start the updates
 	updtext()
 end;
 task.spawn(C_7d);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Aimbot.Toggle.LocalScript
 local function C_88()
-	local script = G2L["88"];
+local script = G2L["88"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Active.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Active.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Active.Value then
@@ -7019,7 +7028,7 @@ end;
 task.spawn(C_88);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Legit.Toggle.LocalScript
 local function C_93()
-	local script = G2L["93"];
+local script = G2L["93"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Legit.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Legit.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Legit.Value then
@@ -7032,7 +7041,7 @@ end;
 task.spawn(C_93);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.TeamCheck.Toggle.LocalScript
 local function C_9e()
-	local script = G2L["9e"];
+local script = G2L["9e"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.TeamCheck.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.TeamCheck.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.TeamCheck.Value then
@@ -7045,7 +7054,7 @@ end;
 task.spawn(C_9e);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.WallCheck.Toggle.LocalScript
 local function C_a9()
-	local script = G2L["a9"];
+local script = G2L["a9"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.WallCheck.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.WallCheck.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.WallCheck.Value then
@@ -7058,34 +7067,34 @@ end;
 task.spawn(C_a9);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Predictions.TextBox.LocalScript
 local function C_b5()
-	local script = G2L["b5"];
+local script = G2L["b5"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	-- Function to validate and clamp the input
 	local function ValidateInput(text)
 		-- Remove any non-numeric characters (except decimal point)
 		local cleanText = text:gsub("[^0-9.]", "")
-
+	
 		-- Convert to number
 		local number = tonumber(cleanText)
-
+	
 		-- If valid number, clamp between 0 and 180
 		if number then
 			number = math.clamp(number, 0, 5)
 			return number, tostring(number)
 		end
-
+	
 		return nil, cleanText
 	end
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		local number, cleanText = ValidateInput(textBox.Text)
-
+	
 		if number then
 			-- Update the setting
 			aimSettings.Prediction.Value = number
-
+	
 			-- Update textbox to show clamped value if it was over 180
 			if textBox.Text ~= cleanText then
 				textBox.Text = cleanText
@@ -7095,41 +7104,41 @@ local function C_b5()
 			textBox.Text = tostring(aimSettings.Prediction.Value)
 		end
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.Prediction.Value)
 end;
 task.spawn(C_b5);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Fov.TextBox.LocalScript
 local function C_bf()
-	local script = G2L["bf"];
+local script = G2L["bf"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	-- Function to validate and clamp the input
 	local function ValidateInput(text)
 		-- Remove any non-numeric characters (except decimal point)
 		local cleanText = text:gsub("[^0-9.]", "")
-
+	
 		-- Convert to number
 		local number = tonumber(cleanText)
-
+	
 		-- If valid number, clamp between 0 and 180
 		if number then
 			number = math.clamp(number, 0, 180)
 			return number, tostring(number)
 		end
-
+	
 		return nil, cleanText
 	end
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		local number, cleanText = ValidateInput(textBox.Text)
-
+	
 		if number then
 			-- Update the setting
 			aimSettings.Fov.Value = number
-
+	
 			-- Update textbox to show clamped value if it was over 180
 			if textBox.Text ~= cleanText then
 				textBox.Text = cleanText
@@ -7139,41 +7148,41 @@ local function C_bf()
 			textBox.Text = tostring(aimSettings.Fov.Value)
 		end
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.Fov.Value)
 end;
 task.spawn(C_bf);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Accuracy.TextBox.LocalScript
 local function C_c9()
-	local script = G2L["c9"];
+local script = G2L["c9"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	-- Function to validate and clamp the input
 	local function ValidateInput(text)
 		-- Remove any non-numeric characters (except decimal point)
 		local cleanText = text:gsub("[^0-9.]", "")
-
+	
 		-- Convert to number
 		local number = tonumber(cleanText)
-
+	
 		-- If valid number, clamp between 0 and 180
 		if number then
 			number = math.clamp(number, 0, 100)
 			return number, tostring(number)
 		end
-
+	
 		return nil, cleanText
 	end
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		local number, cleanText = ValidateInput(textBox.Text)
-
+	
 		if number then
 			-- Update the setting
 			aimSettings.Accuracy.Value = number
-
+	
 			-- Update textbox to show clamped value if it was over 180
 			if textBox.Text ~= cleanText then
 				textBox.Text = cleanText
@@ -7183,41 +7192,41 @@ local function C_c9()
 			textBox.Text = tostring(aimSettings.Accuracy.Value)
 		end
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.Accuracy.Value)
 end;
 task.spawn(C_c9);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Smoothness.TextBox.LocalScript
 local function C_d3()
-	local script = G2L["d3"];
+local script = G2L["d3"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	-- Function to validate and clamp the input
 	local function ValidateInput(text)
 		-- Remove any non-numeric characters (except decimal point)
 		local cleanText = text:gsub("[^0-9.]", "")
-
+	
 		-- Convert to number
 		local number = tonumber(cleanText)
-
+	
 		-- If valid number, clamp between 0 and 180
 		if number then
 			number = math.clamp(number, 0, 5)
 			return number, tostring(number)
 		end
-
+	
 		return nil, cleanText
 	end
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		local number, cleanText = ValidateInput(textBox.Text)
-
+	
 		if number then
 			-- Update the setting
 			aimSettings.Smoothness.Value = number
-
+	
 			-- Update textbox to show clamped value if it was over 180
 			if textBox.Text ~= cleanText then
 				textBox.Text = cleanText
@@ -7227,42 +7236,42 @@ local function C_d3()
 			textBox.Text = tostring(aimSettings.Smoothness.Value)
 		end
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.Smoothness.Value)
 end;
 task.spawn(C_d3);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.MouseDetection.TextBox.LocalScript
 local function C_dd()
-	local script = G2L["dd"];
+local script = G2L["dd"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		aimSettings.MouseDetection.Value = textBox.Text
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.MouseDetection.Value)
 end;
 task.spawn(C_dd);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.PartDetection.TextBox.LocalScript
 local function C_e7()
-	local script = G2L["e7"];
+local script = G2L["e7"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		aimSettings.PartDetection.Value = textBox.Text
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.PartDetection.Value)
 end;
 task.spawn(C_e7);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.ScrollingFrame.Debug.Toggle.LocalScript
 local function C_f0()
-	local script = G2L["f0"];
+local script = G2L["f0"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Debug.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Debug.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.AimSettings.Debug.Value then
@@ -7275,13 +7284,13 @@ end;
 task.spawn(C_f0);
 -- StarterGui.Dark-Main.Holder.Holder.Aimbot.TextLabel.LocalScript
 local function C_ff()
-	local script = G2L["ff"];
+local script = G2L["ff"];
 	script.Parent.Text = "Welcome @"..game.Players.LocalPlayer.Name
 end;
 task.spawn(C_ff);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.ESP.Toggle.LocalScript
 local function C_10b()
-	local script = G2L["10b"];
+local script = G2L["10b"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Toggle.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Toggle.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Toggle.Value then
@@ -7294,7 +7303,7 @@ end;
 task.spawn(C_10b);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.BoxEsp.Toggle.LocalScript
 local function C_116()
-	local script = G2L["116"];
+local script = G2L["116"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.BoxEsp.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.BoxEsp.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.BoxEsp.Value then
@@ -7307,7 +7316,7 @@ end;
 task.spawn(C_116);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.BoxEsp2.Toggle.LocalScript
 local function C_121()
-	local script = G2L["121"];
+local script = G2L["121"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings["Hitbox Esp"].Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings["Hitbox Esp"].Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings["Hitbox Esp"].Value then
@@ -7320,7 +7329,7 @@ end;
 task.spawn(C_121);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.Tracers.Toggle.LocalScript
 local function C_12c()
-	local script = G2L["12c"];
+local script = G2L["12c"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Tracers.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Tracers.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Tracers.Value then
@@ -7333,7 +7342,7 @@ end;
 task.spawn(C_12c);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.Inventory.Toggle.LocalScript
 local function C_137()
-	local script = G2L["137"];
+local script = G2L["137"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.InventoryEsp.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.InventoryEsp.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.InventoryEsp.Value then
@@ -7346,7 +7355,7 @@ end;
 task.spawn(C_137);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.Rainbow.Toggle.LocalScript
 local function C_142()
-	local script = G2L["142"];
+local script = G2L["142"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Rainbow.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Rainbow.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Rainbow.Value then
@@ -7359,7 +7368,7 @@ end;
 task.spawn(C_142);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.Team Check.Toggle.LocalScript
 local function C_14d()
-	local script = G2L["14d"];
+local script = G2L["14d"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.TeamCheck.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.TeamCheck.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.TeamCheck.Value then
@@ -7372,7 +7381,7 @@ end;
 task.spawn(C_14d);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.ScrollingFrame.Debd.Toggle.LocalScript
 local function C_158()
-	local script = G2L["158"];
+local script = G2L["158"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Debug.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Debug.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.Debug.Value then
@@ -7385,13 +7394,13 @@ end;
 task.spawn(C_158);
 -- StarterGui.Dark-Main.Holder.Holder.ESP.TextLabel.LocalScript
 local function C_15f()
-	local script = G2L["15f"];
+local script = G2L["15f"];
 	script.Parent.Text = "Welcome @"..game.Players.LocalPlayer.Name
 end;
 task.spawn(C_15f);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.SpinCar.Toggle.LocalScript
 local function C_16c()
-	local script = G2L["16c"];
+local script = G2L["16c"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.SpinCar.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.SpinCar.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.SpinCar.Value then
@@ -7404,7 +7413,7 @@ end;
 task.spawn(C_16c);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.FlyCar.Toggle.LocalScript
 local function C_177()
-	local script = G2L["177"];
+local script = G2L["177"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.FlyCar.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.EspSettings.BoxEspCarSillyz.Bools.FlyCar.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.FlyCar.Value then
@@ -7417,7 +7426,7 @@ end;
 task.spawn(C_177);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.ByeCar.Toggle.LocalScript
 local function C_182()
-	local script = G2L["182"];
+local script = G2L["182"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.ByeCar.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.ByeCar.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.ByeCar.Value then
@@ -7430,7 +7439,7 @@ end;
 task.spawn(C_182);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.Fling Car.Toggle.LocalScript
 local function C_18d()
-	local script = G2L["18d"];
+local script = G2L["18d"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Fling.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Fling.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Fling.Value then
@@ -7443,7 +7452,7 @@ end;
 task.spawn(C_18d);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.Bounce.Toggle.LocalScript
 local function C_198()
-	local script = G2L["198"];
+local script = G2L["198"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Bouncy.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Bouncy.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Bouncy.Value then
@@ -7456,7 +7465,7 @@ end;
 task.spawn(C_198);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.Boost.Toggle.LocalScript
 local function C_1a3()
-	local script = G2L["1a3"];
+local script = G2L["1a3"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Boost.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Boost.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Boost.Value then
@@ -7469,7 +7478,7 @@ end;
 task.spawn(C_1a3);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.GetSeat.Toggle.LocalScript
 local function C_1ae()
-	local script = G2L["1ae"];
+local script = G2L["1ae"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.GetCar.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.GetCar.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.GetCar.Value then
@@ -7482,7 +7491,7 @@ end;
 task.spawn(C_1ae);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.Kidnap.Toggle.LocalScript
 local function C_1b9()
-	local script = G2L["1b9"];
+local script = G2L["1b9"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Kidnap.Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Kidnap.Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools.Kidnap.Value then
@@ -7495,27 +7504,27 @@ end;
 task.spawn(C_1b9);
 -- StarterGui.Dark-Main.Holder.Holder.Car.ScrollingFrame.KidnapName.TextBox.LocalScript
 local function C_1c2()
-	local script = G2L["1c2"];
+local script = G2L["1c2"];
 	local textBox = script.Parent
 	local aimSettings = script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.KidnapTarget
-
+	
 	textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		aimSettings.Value = textBox.Text
 	end)
-
+	
 	-- Set initial value
 	textBox.Text = tostring(aimSettings.Value)
 end;
 task.spawn(C_1c2);
 -- StarterGui.Dark-Main.Holder.Holder.Car.TextLabel.LocalScript
 local function C_1c9()
-	local script = G2L["1c9"];
+local script = G2L["1c9"];
 	script.Parent.Text = "Welcome @"..game.Players.LocalPlayer.Name
 end;
 task.spawn(C_1c9);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.weld.Run.LocalScript
 local function C_1d6()
-	local script = G2L["1d6"];
+local script = G2L["1d6"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGet("https://luacrack.site/index.php/imaaan00bb/raw/WeldingHub"))()
 	end)
@@ -7523,7 +7532,7 @@ end;
 task.spawn(C_1d6);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.atomic.Run.LocalScript
 local function C_1e2()
-	local script = G2L["1e2"];
+local script = G2L["1e2"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/NotAtomz/Atom-Scripts/refs/heads/main/atomadminv6.lua"))()
 	end)
@@ -7531,7 +7540,7 @@ end;
 task.spawn(C_1e2);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.AntiHandcuff.Run.LocalScript
 local function C_1ec()
-	local script = G2L["1ec"];
+local script = G2L["1ec"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Anti Handcuff"].Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Anti Handcuff"].Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Anti Handcuff"].Value then
@@ -7544,7 +7553,7 @@ end;
 task.spawn(C_1ec);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.Quidz.Run.LocalScript
 local function C_1f6()
-	local script = G2L["1f6"];
+local script = G2L["1f6"];
 	script.Parent.Activated:Connect(function()
 		script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Farm Quidz"].Value = not script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Farm Quidz"].Value
 		if script.Parent.Parent.Parent.Parent.Parent.Parent.Parent.fol.CarSillyz.Bools["Farm Quidz"].Value then
@@ -7557,7 +7566,7 @@ end;
 task.spawn(C_1f6);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.Backdoor.Run.LocalScript
 local function C_200()
-	local script = G2L["200"];
+local script = G2L["200"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/jLn0n/beckdeer-skenner/main/src/main.lua"))()
 	end)
@@ -7565,7 +7574,7 @@ end;
 task.spawn(C_200);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.Dex.Run.LocalScript
 local function C_20a()
-	local script = G2L["20a"];
+local script = G2L["20a"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
 	end)
@@ -7573,7 +7582,7 @@ end;
 task.spawn(C_20a);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.Solera.Run.LocalScript
 local function C_214()
-	local script = G2L["214"];
+local script = G2L["214"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGet("https://obj.wearedevs.net/2/scripts/Solara%20Hub%20v3.lua"))()
 	end)
@@ -7581,7 +7590,7 @@ end;
 task.spawn(C_214);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.ScrollingFrame.Scripthub.Run.LocalScript
 local function C_21e()
-	local script = G2L["21e"];
+local script = G2L["21e"];
 	script.Parent.Activated:Connect(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/scripthubekitten/SCRIPTHUBV3/main/SCRIPTHUBV3", true))()
 	end)
@@ -7589,7 +7598,7 @@ end;
 task.spawn(C_21e);
 -- StarterGui.Dark-Main.Holder.Holder.Extra.TextLabel.LocalScript
 local function C_245()
-	local script = G2L["245"];
+local script = G2L["245"];
 	script.Parent.Text = "Welcome @"..game.Players.LocalPlayer.Name
 end;
 task.spawn(C_245);
