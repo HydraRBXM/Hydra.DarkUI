@@ -158,22 +158,34 @@ local script = G2L["2"];
 	script.Parent = playerGui
 	script.Enabled = true
 	
-	local startlua = script["Dark-Welcome"]
-	startlua.Parent = game.CoreGui
-	startlua.Enabled = true
-	startlua.StartLua.Enabled = true
+	local suss = script["Dark-Welcome"]
+	suss.StartLua.Enabled = true
+	suss.Parent = game.CoreGui
+	suss.Enabled = true
 	
 	local function GetLevel()
-		local lev =	printidentity()
-		
-		return  lev
+		local lev = printidentity()
+		return lev
 	end
+	
 	local level = GetLevel()
 	
 	wait(15)
-	loadstring(`https://raw.githubusercontent.com/HydraRBXM/Hydra.DarkUI/refs/heads/main/MainUI`)
+	
+	-- Fix: Actually fetch and load the remote script
+	local url = "https://raw.githubusercontent.com/HydraRBXM/Hydra.DarkUI/refs/heads/main/MainUI"
+	local success, result = pcall(function()
+		local code = game:HttpGet(url)
+		loadstring(code)()
+	end)
+	
+	if not success then
+		warn("Failed to load remote script:", result)
+	end
+	
 	wait(1)
-	game.CoreGui:WaitForChild(`Dark-Main`).fol2.ExecuterLevel.Value = level
+	
+	game.CoreGui:WaitForChild("Dark-Main").fol2.ExecuterLevel.Value = level
 end;
 task.spawn(C_2);
 
